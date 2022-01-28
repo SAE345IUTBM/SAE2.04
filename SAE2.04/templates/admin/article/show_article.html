@@ -1,0 +1,43 @@
+{% extends 'admin/layout_admin.html' %}
+
+{% block title %}
+    <title>afficher les vélos</title>
+{% endblock %}
+
+{% block body %}
+<h3>Vélo</h3>
+<a  class="btn btn-outline-success" href="/admin/article/add">ajouter un vélo</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Taille roues</th>
+            <th>Poids</th>
+            <th>Prix</th>
+            <th>Marque</th>
+            <th>Couleur</th>
+            <th>Type de vélo</th>
+            <th>Image</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ligne in articles %}
+            <tr>
+                <td>{{ ligne.id_velo }}</td>
+                <td>{{ ligne.libelle_velo }}</td>
+                <td>{{ ligne.taille_roues_velo }}"</td>
+                <td>{{ ligne.poids_velo }} kg</td>
+                <td>{{ ligne.prix_velo }}€</td>
+                <td>{{ ligne.id_marque }}</td>
+                <td>{{ ligne.id_couleur }}</td>
+                <td>{{ ligne.libelle_type_velo }} ({{ ligne.id_type_velo }})</td>
+                <td><img src="../../static/images/{{ ligne.image_velo }}" alt=""></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br><br>
+
+
+{% endblock %}
