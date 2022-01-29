@@ -1,12 +1,121 @@
 {% extends 'admin/layout_admin.html' %}
 {% block title %}
-    <title>modifier un article</title>
+    <title>modifier un Vélo</title>
 {% endblock %}
 
 {% block body %}
-{#  <h2>modifier d'un article</h2>#}
-  {% if error %}
-    <p class=error><strong>Error:</strong> {{ error }}
-  {% endif %}
+    <h2>modifier un vélo</h2>
+    {% if error %}
+        <p class=error><strong>Error:</strong> {{ error }}
+    {% endif %}
+
+    <form method="post" action="/admin/article/edit">
+        <fieldset>
+            <legend class="text-center">Modifier un vélo</legend>
+            <input type="hidden" name="id_velo" value="{{ velo.id_velo }}">
+            <div class="container text-center">
+
+                <div class="row">
+                    <div class="col-xl-6 mb-4">
+                        <div class="card">
+                            <label for="nom_velo">Nom</label>
+                            <input type="text" name="nom_velo" class="form-control" id="nom_velo" value="{{ velo.libelle_velo }}">
+                        </div>
+                    </div>
+                    <div class="col-xl-6 mb-4">
+                        <div class="card">
+                            <label for="taille_roues">Taille roues</label>
+                            <input type="number" step="0.5" class="form-control" name="taille_roues" id="taille_roues" value="{{ velo.taille_roues_velo }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-6 mb-4">
+                        <div class="card">
+                            <label for="poids_velo">Poids</label>
+                            <input type="number" step="0.1" class="form-control" name="poids_velo" id="poids_velo" value="{{ velo.poids_velo }}">
+                        </div>
+                    </div>
+                    <div class="col-xl-6 mb-4">
+                        <div class="card">
+                            <label for="prix_velo">Prix</label>
+                            <input type="number" step="0.01" class="form-control" name="prix_velo" id="prix_velo" value="{{ velo.prix_velo }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-6 mb-4">
+                        <div class="card">
+                            <label for="id_marque">Marque</label>
+                            <select class="form-control" name="id_marque" id="id_marque">
+                                {% for ligne in marque %}
+                                    {% if velo.id_marque == ligne.id_marque %}
+                                        <option value="{{ ligne.id_marque }}" selected="selected">{{ ligne.libelle_marque }}</option>
+                                    {% else %}
+                                        <option value="{{ ligne.id_marque }}">{{ ligne.libelle_marque }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 mb-4">
+                        <div class="card">
+                            <label for="id_marque">Couleur</label>
+                            <select class="form-control" name="id_couleur" id="id_couleur">
+                                {% for ligne in couleur %}
+                                    {% if velo.id_couleur == ligne.id_couleur %}
+                                        <option value="{{ ligne.id_couleur }}" selected="selected">{{ ligne.libelle_couleur }}</option>
+                                    {% else %}
+                                        <option value="{{ ligne.id_couleur }}">{{ ligne.libelle_couleur }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-6 mb-4">
+                        <div class="card">
+                            <label for="id_marque">Type vélo</label>
+                            <select class="form-control" name="id_type_velo" id="id_type_velo">
+                                {% for ligne in type_velo %}
+                                    {% if velo.id_type_velo == ligne.id_type_velo %}
+                                        <option value="{{ ligne.id_type_velo }}" selected="selected">{{ ligne.libelle_type_velo }}</option>
+                                    {% else %}
+                                        <option value="{{ ligne.id_type_velo }}">{{ ligne.libelle_type_velo }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 mb-4">
+                        <div class="card">
+                            <label for="image_velo">Nom image</label>
+                            <input type="text" name="image_velo" class="form-control" id="image_velo" value="{{ velo.image_velo }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-12 mb-4">
+                        <div class="card">
+                            <label for="stock_velo">Stock de vélo</label>
+                            <input type="number" name="stock_velo" class="form-control" id="stock_velo" value="{{ velo.stock_velo }}">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Modifier</button>
+                    <button type="reset" class="btn btn-secondary">Réinitialiser</button>
+                </div>
+
+            </div>
+        </fieldset>
+    </form>
 
 {% endblock %}

@@ -18,7 +18,9 @@
             <th>Marque</th>
             <th>Couleur</th>
             <th>Type de vélo</th>
+            <th>Stock</th>
             <th>Image</th>
+            <th>Opérations</th>
         </tr>
     </thead>
     <tbody>
@@ -29,10 +31,12 @@
                 <td>{{ ligne.taille_roues_velo }}"</td>
                 <td>{{ ligne.poids_velo }} kg</td>
                 <td>{{ ligne.prix_velo }}€</td>
-                <td>{{ ligne.id_marque }}</td>
-                <td>{{ ligne.id_couleur }}</td>
+                <td>{{ ligne.libelle_marque }} ({{ ligne.id_marque }})</td>
+                <td>{{ ligne.libelle_couleur }} ({{ ligne.id_couleur }})</td>
                 <td>{{ ligne.libelle_type_velo }} ({{ ligne.id_type_velo }})</td>
+                <td>{{ ligne.stock_velo }}</td>
                 <td><img src="../../static/images/{{ ligne.image_velo }}" alt=""></td>
+                <td><a href="/admin/article/edit/{{ ligne.id_velo }}" class="btn btn-primary">Modifier</a><br><a href="/admin/article/delete?id_velo={{ ligne.id_velo }}" class="btn btn-primary">Supprimer</a></td>
             </tr>
         {% endfor %}
     </tbody>

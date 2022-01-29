@@ -6,9 +6,9 @@ def get_db():
     db = getattr(g, '_database', None)
     if db is None:
         db = g._database = pymysql.connect(
-            host="serveurmysql",
+            host="localhost",
             # host="serveurmysql",
-            user="vmougeno",
+            user="root",
             password="0301",
             database="BDD_vmougeno",
             charset='utf8mb4',
