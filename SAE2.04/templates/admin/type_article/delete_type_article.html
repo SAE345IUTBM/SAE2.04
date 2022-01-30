@@ -10,11 +10,11 @@
 <h3>Il y a <span style="color:red;"> {{ nbr_articles.nbr_articles }} </span> article(s) à supprimer</h3>
 <br>
 <ul>
-{% if articles | length >= 1 %}
+{% if velo | length >= 1 %}
 
-        {% for ligne in articles %}
+        {% for ligne in velo %}
         <li>
-                 nom : {{ ligne.nom }} -  stock : {{ ligne.stock }} - <a class="btn btn-outline-danger" href="/admin/type-article/delete?id={{ ligne.type_article_id }}&amp;id_article={{ligne.id}}" >supprimer</a>
+                 nom : {{ ligne.libelle_velo }} -  stock : {{ ligne.stock_velo }} - <a class="btn btn-outline-danger" href="/admin/type-article/delete?id_type_velo={{ ligne.id_type_velo }}&amp;id_velo={{ligne.id_velo}}" >supprimer</a>
         </li><br>
         {% endfor %}
 

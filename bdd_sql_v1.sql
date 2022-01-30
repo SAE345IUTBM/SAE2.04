@@ -95,7 +95,7 @@ INSERT INTO Velo VALUES
 (NULL, 'Edge 3.9', 29, 11, 599, 'Lapierre_1.jpg', 11072, 3, 3, 1),
 (NULL, 'Xelius 8.0', 31, 9, 5399, 'Lapierre_2.png', 2384, 3, 7, 3),
 (NULL, 'Riverside 500', 26, 15, 299, 'Btwin_1.jpg', 18411, 4, 3, 2),
-(NULL, 'GAN Dura-Ace', 26, 10, 299, 'Pinarello_1.jpg', 21239, 5, 1, 3),
+(NULL, 'GAN Dura-Ace', 26, 10, 4999, 'Pinarello_1.jpg', 2139, 5, 1, 3),
 (NULL, 'X2', 28, 11, 399, 'Nakamura_1.png', 16486, 6, 1, 2),
 (NULL, 'E-ST 100', 27.5, 22.5, 999, 'Rockrider_1.jpg', 6423, 7, 6, 1),
 (NULL, 'E-ST 520', 27.5, 22.7, 1799, 'Rockrider_2.jpg', 3159, 7, 2, 1),

@@ -1,13 +1,33 @@
 {% extends 'admin/layout_admin.html' %}
 
 {% block title %}
-    <title>afficher les types d'article</title>
+    <title>afficher les types de vélo</title>
 {% endblock %}
 
 {% block body %}
-<h3>Types d'article</h3>
+<h3>Types de vélo</h3>
 <a class="btn btn-outline-success" href="/admin/type-article/add">ajouter un type d'article</a>
 <br><br>
-
+<table class="table text-center">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Désignation</th>
+            <th>Nombre de vélos</th>
+            <th>Opérations</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ligne in types_articles %}
+            <tr>
+                <td>{{ ligne.id_type_velo }}</td>
+                <td>{{ ligne.libelle_type_velo }}</td>
+                <td>{{ ligne.nb_velo }}</td>
+                <td><a href="/admin/type-article/edit/{{ ligne.id_type_velo }}" class="btn btn-primary">Modifier</a>
+                    <a href="/admin/type-article/delete?id_type_velo={{ ligne.id_type_velo }}" class="btn btn-primary">Supprimer</a></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 {% endblock %}
