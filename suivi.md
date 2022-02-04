@@ -11,7 +11,7 @@
  - Dorian Lacreuse : ABS
  - Valentin, David, Julien : début de mise en ligne sur python anywhere
  ## Jeudi 2 février et vendredi 3 février
-  -Valentin Mougenot : suite du flask et fin du MCD
-  -Julien Mourcely : fin du MCD
-  -David Monnier : rapport MCD et cahier des charges
-  -Dorian Lacreuse : fin du MCD et rapport MCD
+  - Valentin Mougenot : suite du flask et fin du MCD
+  - Julien Mourcely : fin du MCD
+  - David Monnier : rapport MCD et cahier des charges
+  - Dorian Lacreuse : fin du MCD et rapport MCD
