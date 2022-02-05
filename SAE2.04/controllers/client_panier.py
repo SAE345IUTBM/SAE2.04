@@ -5,6 +5,8 @@ from flask import Flask, request, render_template, redirect, url_for, abort, fla
 
 from connexion_db import get_db
 
+from datetime import datetime
+
 client_panier = Blueprint('client_panier', __name__,
                         template_folder='templates')
 
@@ -24,8 +26,9 @@ def client_panier_add():
         sql = "UPDATE panier SET quantite_panier = %s WHERE id_panier = %s"
         tuple_panier = (qte + int(quantite), id_pan)
     else:
-        sql = "INSERT INTO panier VALUES (NULL, NOW(), %s, %s, %s)"
-        tuple_panier = (quantite, session['user_id'], id)
+        sql = "INSERT INTO panier VALUES (NULL, %s, %s, %s, %s)"
+        date_panier = datetime.now().strftime('%Y-%m-%d %H/%M:%S')
+        tuple_panier = (date_panier, quantite, session['user_id'], id)
     mycursor.execute(sql, tuple_panier)
     sql = "SELECT stock_velo FROM Velo WHERE id_velo = %s"
     mycursor.execute(sql, id)

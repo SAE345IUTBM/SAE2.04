@@ -62,7 +62,15 @@ def client_article_details(id):
     mycursor = get_db().cursor()
     sql = "SELECT * FROM Velo WHERE id_velo = %s"
     mycursor.execute(sql, id)
-    article = mycursor.fetchall()
-    commentaires=None
-    commandes_articles=None
+    article = mycursor.fetchone()
+    print(article)
+    sql = "SELECT * FROM Avis INNER JOIN depose ON Avis.id_avis = depose.id_avis WHERE depose.id_velo = %s"
+    mycursor.execute(sql, id)
+    commentaires = mycursor.fetchall()
+    print(commentaires)
+    sql = "SELECT commande.id_commande FROM commande INNER JOIN ligne_commande ON commande.id_commande = ligne_commande.id_commande INNER JOIN Velo ON ligne_commande.id_velo = Velo.id_velo WHERE commande.id_user = %s AND ligne_commande.id_velo = %s"
+    tuple_commande = (session['user_id'], id)
+    mycursor.execute(sql, tuple_commande)
+    commandes_articles = mycursor.fetchall()
+    print(commandes_articles)
     return render_template('client/boutique/article_details.html', article=article, commentaires=commentaires, commandes_articles=commandes_articles)
