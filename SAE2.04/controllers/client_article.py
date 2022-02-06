@@ -12,7 +12,7 @@ client_article = Blueprint('client_article', __name__,
 @client_article.route('/client/article/show')      # remplace /client
 def client_article_show():                                 # remplace client_index
     mycursor = get_db().cursor()
-    sql = "SELECT *, COUNT(Avis.note) AS nb_notes, AVG(Avis.note) AS moy_notes, COUNT(Avis.commentaire) AS nb_avis FROM Velo INNER JOIN Fournisseur ON Velo.id_fournisseur = Fournisseur.id_fournisseur INNER JOIN Type_velo ON Velo.id_type_velo = type_velo.id_type_velo LEFT JOIN depose ON Velo.id_velo = depose.id_velo LEFT JOIN Avis ON depose.id_avis = Avis.id_avis "
+    sql = "SELECT *, COUNT(Avis.note) AS nb_notes, AVG(Avis.note) AS moy_notes, COUNT(Avis.commentaire) AS nb_avis FROM Velo INNER JOIN Fournisseur ON Velo.id_fournisseur = Fournisseur.id_fournisseur INNER JOIN Type_velo ON Velo.id_type_velo = Type_velo.id_type_velo LEFT JOIN depose ON Velo.id_velo = depose.id_velo LEFT JOIN Avis ON depose.id_avis = Avis.id_avis "
     list_param = []
     condition_and = ""
     if "filter_word" in session or "filter_prix_min" in session or "filter_prix_max" in session or "filter_types" in session:
