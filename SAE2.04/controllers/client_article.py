@@ -12,18 +12,18 @@ client_article = Blueprint('client_article', __name__,
 @client_article.route('/client/article/show')      # remplace /client
 def client_article_show():                                 # remplace client_index
     mycursor = get_db().cursor()
-    sql = "SELECT * FROM Velo INNER JOIN Fournisseur ON Velo.id_fournisseur = Fournisseur.id_fournisseur "
+    sql = "SELECT *, COUNT(Avis.note) AS nb_notes, AVG(Avis.note) AS moy_notes, COUNT(Avis.commentaire) AS nb_avis FROM Velo INNER JOIN Fournisseur ON Velo.id_fournisseur = Fournisseur.id_fournisseur INNER JOIN Type_velo ON Velo.id_type_velo = type_velo.id_type_velo LEFT JOIN depose ON Velo.id_velo = depose.id_velo LEFT JOIN Avis ON depose.id_avis = Avis.id_avis "
     list_param = []
     condition_and = ""
     if "filter_word" in session or "filter_prix_min" in session or "filter_prix_max" in session or "filter_types" in session:
         sql = sql + "WHERE "
     if "filter_word" in session:
-        sql = sql + "libelle_velo LIKE %s "
+        sql = sql + "Velo.libelle_velo LIKE %s "
         recherche = "%" + session["filter_word"] + "%"
         list_param.append(recherche)
         condition_and = " AND "
     if "filter_prix_min" in session or "filter_prix_max" in session:
-        sql = sql + " prix_velo BETWEEN %s AND %s "
+        sql = sql + " Velo.prix_velo BETWEEN %s AND %s "
         list_param.append(session["filter_prix_min"])
         list_param.append(session["filter_prix_max"])
         condition_and = " AND "
@@ -31,12 +31,13 @@ def client_article_show():                                 # remplace client_ind
         sql = sql + condition_and + "("
         last_item = session['filter_types'][-1]
         for item in session['filter_types']:
-            sql = sql + "id_type_velo = %s "
+            sql = sql + "Velo.id_type_velo = %s "
             if item != last_item:
                 sql = sql + " OR "
             list_param.append(item)
         sql = sql + ")"
 
+    sql = sql + " GROUP BY Velo.id_velo"
     tuple_sql = tuple(list_param)
 
     mycursor.execute(sql, tuple_sql)

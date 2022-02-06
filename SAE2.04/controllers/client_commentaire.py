@@ -15,9 +15,18 @@ def client_comment_add():
     user_id = request.form.get('idUser', None)
     commentaire = request.form.get('commentaire', None)
     note = request.form.get('note', None)
-    print(article_id)
-    sql = "INSERT INTO Avis (commentaire, note) VALUES (%s, %s)"
-    tuple_insert = (commentaire, note)
+    if commentaire == '' and note == '':
+        flash(u'Aucune note et avis donné')
+        return redirect('/client/article/details/' + article_id)
+    elif commentaire == '':
+        sql = "INSERT INTO Avis (commentaire, note) VALUES (NULL, %s)"
+        tuple_insert = (note)
+    elif note == '':
+        sql = "INSERT INTO Avis (commentaire, note) VALUES (%s, NULL)"
+        tuple_insert = (commentaire)
+    else:
+        sql = "INSERT INTO Avis (commentaire, note) VALUES (%s, %s)"
+        tuple_insert = (commentaire, note)
     mycursor.execute(sql, tuple_insert)
     mycursor.execute("SELECT last_insert_id() AS last_insert_id")
     id_avis = mycursor.fetchone()['last_insert_id']
