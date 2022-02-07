@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS user (
 
 CREATE TABLE IF NOT EXISTS etat(
     id_etat INT AUTO_INCREMENT,
-    libelle VARCHAR(255),
+    libelle_etat VARCHAR(255),
     PRIMARY KEY(id_etat)
 );
 
