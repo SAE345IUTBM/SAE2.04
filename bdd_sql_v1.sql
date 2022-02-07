@@ -191,6 +191,6 @@ INSERT INTO user (id, email, username, password, role,  est_actif) VALUES
 
 INSERT INTO etat (libelle_etat) VALUES
 ('En attente'),
-('Expédié')
+('Expédié'),
 ('Validé'),
 ('Confirmé');
