@@ -16,27 +16,30 @@ def client_panier_add():
     mycursor = get_db().cursor()
     id = request.form.get('idArticle', '')
     quantite = request.form.get('quantite', '')
-    sql = "SELECT id_panier, quantite_panier FROM panier WHERE id_user = %s AND id_velo = %s"
-    tuple_1 = (session['user_id'], id)
-    mycursor.execute(sql, tuple_1)
-    resultat = mycursor.fetchone()
-    if resultat is not None:
-        qte = resultat['quantite_panier']
-        id_pan = resultat['id_panier']
-        sql = "UPDATE panier SET quantite_panier = %s WHERE id_panier = %s"
-        tuple_panier = (qte + int(quantite), id_pan)
-    else:
-        sql = "INSERT INTO panier VALUES (NULL, %s, %s, %s, %s)"
-        date_panier = datetime.now().strftime('%Y-%m-%d %H/%M:%S')
-        tuple_panier = (date_panier, quantite, session['user_id'], id)
-    mycursor.execute(sql, tuple_panier)
-    sql = "SELECT stock_velo FROM Velo WHERE id_velo = %s"
-    mycursor.execute(sql, id)
-    stock = mycursor.fetchone()['stock_velo']
-    sql = "UPDATE Velo SET stock_velo = %s WHERE id_velo = %s"
-    tuple_update = (int(stock) - int(quantite), id)
-    mycursor.execute(sql, tuple_update)
-    get_db().commit()
+    if quantite == '':
+        quantite = 0
+    if int(quantite) > 0:
+        sql = "SELECT id_panier, quantite_panier FROM panier WHERE id_user = %s AND id_velo = %s"
+        tuple_1 = (session['user_id'], id)
+        mycursor.execute(sql, tuple_1)
+        resultat = mycursor.fetchone()
+        if resultat is not None:
+            qte = resultat['quantite_panier']
+            id_pan = resultat['id_panier']
+            sql = "UPDATE panier SET quantite_panier = %s WHERE id_panier = %s"
+            tuple_panier = (qte + int(quantite), id_pan)
+        else:
+            sql = "INSERT INTO panier VALUES (NULL, %s, %s, %s, %s)"
+            date_panier = datetime.now().strftime('%Y-%m-%d %H/%M:%S')
+            tuple_panier = (date_panier, quantite, session['user_id'], id)
+        mycursor.execute(sql, tuple_panier)
+        sql = "SELECT stock_velo FROM Velo WHERE id_velo = %s"
+        mycursor.execute(sql, id)
+        stock = mycursor.fetchone()['stock_velo']
+        sql = "UPDATE Velo SET stock_velo = %s WHERE id_velo = %s"
+        tuple_update = (int(stock) - int(quantite), id)
+        mycursor.execute(sql, tuple_update)
+        get_db().commit()
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))
 
