@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS depose, ligne_commande, commande, etat, panier, user, defini, Avis, Velo, Materiaux, Fournisseur, Type_velo, Stock, Couleur, Marque;
+DROP TABLE IF EXISTS depose, ligne_commande, commande, etat, panier, user, defini, Avis, Velo, Materiaux, Fournisseur, Type_velo, Couleur, Marque;
 
 CREATE TABLE IF NOT EXISTS Marque(
     id_marque INT NOT NULL AUTO_INCREMENT,
@@ -51,22 +51,14 @@ CREATE TABLE IF NOT EXISTS Velo(
         FOREIGN KEY(id_materiaux) REFERENCES Materiaux(id_materiaux)
 );
 
-CREATE TABLE IF NOT EXISTS Stock (
-    id_stock INT AUTO_INCREMENT,
-    stock_velo INT,
-    PRIMARY KEY(id_stock)
-);
-
 CREATE TABLE IF NOT EXISTS defini (
     id_velo INT,
-    id_stock INT,
     id_couleur INT,
-    libelle_image VARCHAR(255),
-    PRIMARY KEY (id_velo, id_stock, id_couleur),
+    stock_velo INT,
+    image_velo VARCHAR(255),
+    PRIMARY KEY (id_velo, id_couleur),
     CONSTRAINT fk_velo_defini
         FOREIGN KEY (id_velo) REFERENCES Velo(id_velo),
-    CONSTRAINT fk_stock_defini
-        FOREIGN KEY (id_stock) REFERENCES Stock(id_stock),
     CONSTRAINT fk_couleur_defini
         FOREIGN KEY (id_couleur) REFERENCES Couleur(id_couleur)
 );
@@ -199,37 +191,22 @@ INSERT INTO Velo VALUES
 (NULL, 'MARLIN 8 SRAM SX', 27.5, 13.2, 1024, 8, 1, 6, 1),
 (NULL, 'Verve+ 3', 29, 24, 3000, 8, 2, 4, 1);
 
-INSERT INTO Stock (stock_velo) VALUES
-(4219),
-(3781),
-(753),
-(1128),
-(6212),
-(977),
-(17544),
-(951),
-(14816),
-(5294),
-(3105),
-(3843),
-(7667),
-(2437);
 
 INSERT INTO defini VALUES
-(1, 1, 3, 'Cannondale_1.png'),
-(2, 2, 4, 'Cannondale_2.png'),
-(3, 3, 3, 'BMC_1.png'),
-(4, 4, 8, 'BMC_2.png'),
-(5, 5, 3, 'Lapierre_1.jpg'),
-(6, 6, 7, 'Lapierre_2.png'),
-(7, 7, 3, 'Btwin_1.jpg'),
-(8, 8, 1, 'Pinarello_1.jpg'),
-(9, 9, 1, 'Nakamura_1.png'),
-(10, 10, 6, 'Rockrider_1.jpg'),
-(11, 11, 2, 'Rockrider_2.jpg'),
-(12, 12, 6, 'Rockrider_3.jpg'),
-(13, 13, 7, 'Trek_1.jpg'),
-(14, 14, 3, 'Trek_2.png');
+(1, 3, 4219, 'Cannondale_1.png'),
+(2, 4, 3781, 'Cannondale_2.png'),
+(3, 3, 753, 'BMC_1.png'),
+(4, 8, 1128, 'BMC_2.png'),
+(5, 3, 6212, 'Lapierre_1.jpg'),
+(6, 7, 977, 'Lapierre_2.png'),
+(7, 3, 17544, 'Btwin_1.jpg'),
+(8, 1, 951, 'Pinarello_1.jpg'),
+(9, 1, 14816, 'Nakamura_1.png'),
+(10, 6, 5294, 'Rockrider_1.jpg'),
+(11, 2, 3105, 'Rockrider_2.jpg'),
+(12, 6, 3843, 'Rockrider_3.jpg'),
+(13, 7, 7667, 'Trek_1.jpg'),
+(14, 3, 2437, 'Trek_2.png');
 
 INSERT INTO user (id, email, username, password, role,  est_actif) VALUES
 (NULL, 'admin@admin.fr', 'admin', 'sha256$pBGlZy6UukyHBFDH$2f089c1d26f2741b68c9218a68bfe2e25dbb069c27868a027dad03bcb3d7f69a', 'ROLE_admin', 1),
