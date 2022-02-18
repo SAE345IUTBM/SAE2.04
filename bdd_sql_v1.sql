@@ -102,12 +102,15 @@ CREATE TABLE IF NOT EXISTS commande(
 CREATE TABLE IF NOT EXISTS ligne_commande(
     id_commande INT,
     id_velo INT,
+    id_couleur INT,
     prix_unitaire NUMERIC(7,2),
     quantite INT,
     CONSTRAINT fk_ligne_commande_commande
         FOREIGN KEY(id_commande) REFERENCES commande(id_commande),
     CONSTRAINT fk_ligne_commande_velo
-        FOREIGN KEY(id_velo) REFERENCES Velo(id_velo)
+        FOREIGN KEY(id_velo) REFERENCES Velo(id_velo),
+    CONSTRAINT fk_ligne_commande_couleur
+        FOREIGN KEY(id_couleur) REFERENCES Couleur(id_couleur)
 );
 
 CREATE TABLE IF NOT EXISTS panier(
@@ -116,11 +119,14 @@ CREATE TABLE IF NOT EXISTS panier(
     quantite_panier INT,
     id_user INT,
     id_velo INT,
+    id_couleur INT,
     PRIMARY KEY(id_panier),
     CONSTRAINT fk_panier_user
         FOREIGN KEY(id_user) REFERENCES user(id),
     CONSTRAINT fk_panier_velo
-        FOREIGN KEY(id_velo) REFERENCES Velo(id_velo)
+        FOREIGN KEY(id_velo) REFERENCES Velo(id_velo),
+    CONSTRAINT fk_panier_couleur
+        FOREIGN KEY(id_couleur) REFERENCES Couleur(id_couleur)
 );
 
 CREATE TABLE IF NOT EXISTS depose(
@@ -144,7 +150,8 @@ INSERT INTO Marque VALUES
 (NULL, 'Pinarello'),
 (NULL, 'Nakamura'),
 (NULL, 'Rockrider'),
-(NULL, 'Trek');
+(NULL, 'Trek'),
+(NULL, 'Canyon');
 
 INSERT INTO Couleur VALUES
 (NULL, 'Noir'),
@@ -189,7 +196,8 @@ INSERT INTO Velo VALUES
 (NULL, 'E-ST 520', 27.5, 22.7, 1799, 7, 1, 1, 1),
 (NULL, 'E-ST 500', 27.5, 22.2, 1299, 7, 1, 1, 1),
 (NULL, 'MARLIN 8 SRAM SX', 27.5, 13.2, 1024, 8, 1, 6, 1),
-(NULL, 'Verve+ 3', 29, 24, 3000, 8, 2, 4, 1);
+(NULL, 'Verve+ 3', 29, 24, 3000, 8, 2, 4, 1),
+(NULL, 'Lux Trail CF 7', 29, 11.7, 4299, 9, 1, 5, 3);
 
 
 INSERT INTO defini VALUES
@@ -206,7 +214,9 @@ INSERT INTO defini VALUES
 (11, 2, 3105, 'Rockrider_2.jpg'),
 (12, 6, 3843, 'Rockrider_3.jpg'),
 (13, 7, 7667, 'Trek_1.jpg'),
-(14, 3, 2437, 'Trek_2.png');
+(14, 3, 2437, 'Trek_2.png'),
+(15, 2, 1931, 'Canyon_1.jpeg'),
+(15, 3, 1485, 'Canyon_2.jpeg');
 
 INSERT INTO user (id, email, username, password, role,  est_actif) VALUES
 (NULL, 'admin@admin.fr', 'admin', 'sha256$pBGlZy6UukyHBFDH$2f089c1d26f2741b68c9218a68bfe2e25dbb069c27868a027dad03bcb3d7f69a', 'ROLE_admin', 1),
@@ -218,3 +228,6 @@ INSERT INTO etat (libelle_etat) VALUES
 ('Expédié'),
 ('Validé'),
 ('Confirmé');
+
+SELECT * FROM panier;
+SELECT * FROM panier INNER JOIN Velo ON panier.id_velo = Velo.id_velo RIGHT JOIN defini ON panier.id_velo = defini.id_velo AND panier.id_couleur = defini.id_couleur INNER JOIN Couleur ON panier.id_couleur = Couleur.id_couleur;

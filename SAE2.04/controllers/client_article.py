@@ -37,7 +37,6 @@ def client_article_show():                                 # remplace client_ind
             list_param.append(item)
         sql = sql + ")"
 
-    sql = sql + " GROUP BY Velo.id_velo"
     tuple_sql = tuple(list_param)
 
     mycursor.execute(sql, tuple_sql)
@@ -50,9 +49,10 @@ def client_article_show():                                 # remplace client_ind
 
     mycursor.execute("SELECT * FROM Type_velo")
     types_articles = mycursor.fetchall()
-    sql = "SELECT * FROM panier INNER JOIN Velo ON panier.id_velo = Velo.id_velo INNER JOIN defini ON Velo.id_velo = defini.id_velo WHERE id_user = %s"
+    sql = "SELECT * FROM panier INNER JOIN Velo ON panier.id_velo = Velo.id_velo RIGHT JOIN defini ON panier.id_velo = defini.id_velo AND panier.id_couleur = defini.id_couleur INNER JOIN Couleur ON panier.id_couleur = Couleur.id_couleur WHERE id_user = %s"
     mycursor.execute(sql, session['user_id'])
     articles_panier = mycursor.fetchall()
+    print(articles_panier)
     sql = "SELECT SUM(Velo.prix_velo * panier.quantite_panier) AS prix_total FROM panier INNER JOIN Velo ON panier.id_velo = Velo.id_velo WHERE panier.id_user = %s"
     mycursor.execute(sql, session['user_id'])
     prix_total = mycursor.fetchone()['prix_total']

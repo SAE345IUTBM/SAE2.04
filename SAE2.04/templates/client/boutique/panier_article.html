@@ -8,6 +8,7 @@
                 <table class="table table-hover table-responsive">
                     <tr>
                         <th style="width: 300px">Nom</th>
+                        <th style="width: 300px">Couleur</th>
                         <th style="width: 50px">Quantité</th>
                         <th style="width: 50px">Prix</th>
                         <th style="width: 100px">Sous-Total</th>
@@ -19,10 +20,12 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
                     {% else %}
                     {% for itemPanier in articlesPanier %}
                         <tr>
                             <td>{{itemPanier.libelle_velo}}</td>
+                            <td>{{ itemPanier.libelle_couleur }}</td>
                             <td>{{itemPanier.quantite_panier}}</td>
                             <td>{{itemPanier.prix_velo}}</td>
                             <td>{{ "{:,.2f} €".format((itemPanier.prix_velo * itemPanier.quantite_panier)) }}</td>
@@ -31,16 +34,19 @@
                                 <form action="/client/panier/add" style="display: inline-block;"  method="post">
                                         <input type="hidden" name="quantite" value="1">
                                         <input type="hidden" name="idArticle" value="{{ itemPanier.id_velo }}">
+                                        <input type="hidden" name="idCouleur" value="{{ itemPanier.id_couleur }}">
                                     <button class="btn btn-primary" > + </button>
                                 </form>
                                {% endif %}
                                 <form action="/client/panier/delete"  style="display: inline-block;"  method="post">
                                     <input type="hidden" name="idArticle" value="{{ itemPanier.id_velo }}">
+                                    <input type="hidden" name="idCouleur" value="{{ itemPanier.id_couleur }}">
                                     <button class="btn btn-primary" > - </button>
                                 </form>
 
                                 <form action="/client/panier/delete/line" style="display: inline-block;"  method="post">
                                     <input type="hidden" name="idArticle" value="{{ itemPanier.id_velo }}">
+                                    <input type="hidden" name="idCouleur" value="{{ itemPanier.id_couleur }}">
                                     <button class="btn btn-primary" >Supprimer</button>
                                 </form>
                             </td>
@@ -94,6 +100,7 @@
                                 <div class="card-body">
                                         <form  action="/client/panier/add" method="post">
                                             <input type="hidden" name="idArticle" value="{{ article.id_velo }}">
+                                            <input type="hidden" name="idCouleur" value="{{ article.id_couleur }}">
                                             <button class="btn btn-success float-right">
                                                 <i class="fas fa-shopping-cart"></i>
                                                 Ajouter

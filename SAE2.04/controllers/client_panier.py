@@ -15,12 +15,13 @@ client_panier = Blueprint('client_panier', __name__,
 def client_panier_add():
     mycursor = get_db().cursor()
     id = request.form.get('idArticle', '')
+    id_couleur = request.form.get('idCouleur', '')
     quantite = request.form.get('quantite', '')
     if quantite == '':
         quantite = 0
     if int(quantite) > 0:
-        sql = "SELECT id_panier, quantite_panier FROM panier WHERE id_user = %s AND id_velo = %s"
-        tuple_1 = (session['user_id'], id)
+        sql = "SELECT id_panier, quantite_panier FROM panier WHERE id_user = %s AND id_velo = %s AND id_couleur = %s"
+        tuple_1 = (session['user_id'], id, id_couleur)
         mycursor.execute(sql, tuple_1)
         resultat = mycursor.fetchone()
         if resultat is not None:
@@ -29,15 +30,16 @@ def client_panier_add():
             sql = "UPDATE panier SET quantite_panier = %s WHERE id_panier = %s"
             tuple_panier = (qte + int(quantite), id_pan)
         else:
-            sql = "INSERT INTO panier VALUES (NULL, %s, %s, %s, %s)"
+            sql = "INSERT INTO panier VALUES (NULL, %s, %s, %s, %s, %s)"
             date_panier = datetime.now().strftime('%Y-%m-%d %H/%M:%S')
-            tuple_panier = (date_panier, quantite, session['user_id'], id)
+            tuple_panier = (date_panier, quantite, session['user_id'], id, id_couleur)
         mycursor.execute(sql, tuple_panier)
-        sql = "SELECT stock_velo FROM defini WHERE id_velo = %s"
-        mycursor.execute(sql, id)
+        sql = "SELECT stock_velo FROM defini WHERE id_velo = %s AND id_couleur = %s"
+        tuple_stock = (id, id_couleur)
+        mycursor.execute(sql, tuple_stock)
         stock = mycursor.fetchone()['stock_velo']
-        sql = "UPDATE defini SET stock_velo = %s WHERE id_velo = %s"
-        tuple_update = (int(stock) - int(quantite), id)
+        sql = "UPDATE defini SET stock_velo = %s WHERE id_velo = %s AND id_couleur = %s"
+        tuple_update = (int(stock) - int(quantite), id, id_couleur)
         mycursor.execute(sql, tuple_update)
         get_db().commit()
     return redirect('/client/article/show')
@@ -47,8 +49,9 @@ def client_panier_add():
 def client_panier_delete():
     mycursor = get_db().cursor()
     id = request.form.get('idArticle', '')
-    sql = "SELECT id_panier, quantite_panier FROM panier WHERE id_user = %s AND id_velo = %s"
-    tuple_1 = (session['user_id'], id)
+    id_couleur = request.form.get('idCouleur', '')
+    sql = "SELECT id_panier, quantite_panier FROM panier WHERE id_user = %s AND id_velo = %s AND id_couleur = %s"
+    tuple_1 = (session['user_id'], id, id_couleur)
     mycursor.execute(sql, tuple_1)
     resultat = mycursor.fetchone()
     if resultat['quantite_panier'] == 1:
@@ -58,11 +61,12 @@ def client_panier_delete():
         sql = "UPDATE panier SET quantite_panier = %s WHERE id_panier = %s"
         tuple_panier = (int(resultat['quantite_panier']) - 1, resultat['id_panier'])
         mycursor.execute(sql, tuple_panier)
-    sql = "SELECT stock_velo FROM defini WHERE id_velo = %s"
-    mycursor.execute(sql, id)
+    sql = "SELECT stock_velo FROM defini WHERE id_velo = %s AND id_couleur = %s"
+    tuple_stock = (id, id_couleur)
+    mycursor.execute(sql, tuple_stock)
     stock = mycursor.fetchone()['stock_velo']
-    sql = "UPDATE defini SET stock_velo = %s WHERE id_velo = %s"
-    tuple_update = (int(stock) + 1, id)
+    sql = "UPDATE defini SET stock_velo = %s WHERE id_velo = %s AND id_couleur = %s"
+    tuple_update = (int(stock) + 1, id, id_couleur)
     mycursor.execute(sql, tuple_update)
     get_db().commit()
 
@@ -79,11 +83,13 @@ def client_panier_vider():
     for item in panier:
         qte = item['quantite_panier']
         id_velo = item['id_velo']
-        sql = "SELECT stock_velo FROM defini WHERE id_velo = %s"
-        mycursor.execute(sql, id_velo)
+        id_couleur = item['id_couleur']
+        sql = "SELECT stock_velo FROM defini WHERE id_velo = %s AND id_couleur = %s"
+        tuple_stock = (id_velo, id_couleur)
+        mycursor.execute(sql, tuple_stock)
         stock_velo = mycursor.fetchone()['stock_velo']
-        sql = "UPDATE defini SET stock_velo = %s WHERE id_velo = %s"
-        tuple_velo = (stock_velo + qte, id_velo)
+        sql = "UPDATE defini SET stock_velo = %s WHERE id_velo = %s AND id_couleur = %s"
+        tuple_velo = (stock_velo + qte, id_velo, id_couleur)
         mycursor.execute(sql, tuple_velo)
 
     sql = "DELETE FROM panier WHERE id_user = %s"
@@ -97,20 +103,22 @@ def client_panier_vider():
 def client_panier_delete_line():
     mycursor = get_db().cursor()
     id = request.form.get('idArticle', '')
-    sql = "SELECT id_panier, quantite_panier FROM panier WHERE id_velo = %s AND id_user = %s"
-    tuple_panier = (id, session['user_id'])
+    id_couleur = request.form.get('idCouleur', '')
+    sql = "SELECT id_panier, quantite_panier FROM panier WHERE id_velo = %s AND id_couleur = %s AND id_user = %s"
+    tuple_panier = (id, id_couleur, session['user_id'])
     mycursor.execute(sql, tuple_panier)
 
     panier = mycursor.fetchone()
     id_panier = panier['id_panier']
     qte = panier['quantite_panier']
 
-    sql = "SELECT stock_velo FROM defini WHERE id_velo = %s"
-    mycursor.execute(sql, id)
+    sql = "SELECT stock_velo FROM defini WHERE id_velo = %s AND id_couleur = %s"
+    tuple_stock = (id, id_couleur)
+    mycursor.execute(sql, tuple_stock)
     stock = mycursor.fetchone()['stock_velo']
 
-    sql = "UPDATE defini SET stock_velo = %s WHERE id_velo = %s"
-    tuple_velo = (stock + qte, id)
+    sql = "UPDATE defini SET stock_velo = %s WHERE id_velo = %s AND id_couleur = %s"
+    tuple_velo = (stock + qte, id, id_couleur)
     mycursor.execute(sql, tuple_velo)
 
     sql = "DELETE FROM panier WHERE id_panier = %s"

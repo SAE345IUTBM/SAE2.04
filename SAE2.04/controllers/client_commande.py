@@ -33,8 +33,8 @@ def client_commande_add():
         sql = "SELECT prix_velo FROM Velo WHERE id_velo = %s"
         mycursor.execute(sql, item['id_velo'])
         prix = mycursor.fetchone()
-        sql = "INSERT INTO ligne_commande(id_commande, id_velo, prix_unitaire, quantite) VALUES (%s, %s, %s, %s)"
-        tuple_insert = (commande_id['last_insert_id'], item['id_velo'], prix['prix_velo'], item['quantite_panier'])
+        sql = "INSERT INTO ligne_commande(id_commande, id_velo, id_couleur, prix_unitaire, quantite) VALUES (%s, %s, %s, %s, %s)"
+        tuple_insert = (commande_id['last_insert_id'], item['id_velo'], item['id_couleur'], prix['prix_velo'], item['quantite_panier'])
         mycursor.execute(sql, tuple_insert)
 
     get_db().commit()
@@ -51,7 +51,7 @@ def client_commande_show():
     sql = "SELECT commande.id_commande AS id_commande, commande.id_etat AS id_etat, commande.date_achat AS date_achat, etat.libelle_etat AS libelle_etat, SUM(ligne_commande.quantite) AS nbr_articles, SUM(ligne_commande.quantite * ligne_commande.prix_unitaire) AS prix_total FROM commande INNER JOIN ligne_commande ON commande.id_commande = ligne_commande.id_commande INNER JOIN etat ON commande.id_etat = etat.id_etat WHERE id_user = %s GROUP BY commande.id_commande ORDER BY commande.date_achat DESC"
     mycursor.execute(sql, session['user_id'])
     commandes = mycursor.fetchall()
-    sql = "SELECT *, ligne_commande.prix_unitaire * ligne_commande.quantite AS prix_ligne FROM ligne_commande INNER JOIN Velo ON ligne_commande.id_velo = Velo.id_velo WHERE id_commande = %s"
+    sql = "SELECT *, ligne_commande.prix_unitaire * ligne_commande.quantite AS prix_ligne FROM ligne_commande INNER JOIN Velo ON ligne_commande.id_velo = Velo.id_velo INNER JOIN Couleur ON ligne_commande.id_couleur = Couleur.id_couleur WHERE id_commande = %s"
     mycursor.execute(sql, id_commande)
     articles_commande = mycursor.fetchall()
     print(articles_commande)
