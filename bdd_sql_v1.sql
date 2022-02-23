@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS depose, ligne_commande, commande, etat, panier, user, defini, donne, Avis, Velo, Materiaux, Fournisseur, Type_velo, Couleur, Marque;
+DROP TABLE IF EXISTS donne, depose, ligne_commande, commande, etat, panier, user, defini, Avis, Velo, Materiaux, Fournisseur, Type_velo, Couleur, Marque;
 
 CREATE TABLE IF NOT EXISTS Marque(
     id_marque INT NOT NULL AUTO_INCREMENT,
