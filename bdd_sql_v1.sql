@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS depose, ligne_commande, commande, etat, panier, user, defini, Avis, Velo, Materiaux, Fournisseur, Type_velo, Couleur, Marque;
+DROP TABLE IF EXISTS depose, ligne_commande, commande, etat, panier, user, defini, donne, Avis, Velo, Materiaux, Fournisseur, Type_velo, Couleur, Marque;
 
 CREATE TABLE IF NOT EXISTS Marque(
     id_marque INT NOT NULL AUTO_INCREMENT,
@@ -66,7 +66,6 @@ CREATE TABLE IF NOT EXISTS defini (
 CREATE TABLE IF NOT EXISTS Avis(
     id_avis INT AUTO_INCREMENT,
     commentaire VARCHAR(255),
-    note DECIMAL(2,1),
     PRIMARY KEY(id_avis)
  );
 
@@ -141,6 +140,17 @@ CREATE TABLE IF NOT EXISTS depose(
     CONSTRAINT fk_depose_avis
         FOREIGN KEY(id_avis) REFERENCES Avis(id_avis)
  );
+
+CREATE TABLE IF NOT EXISTS donne(
+    id_velo INT,
+    id_user INT,
+    note DECIMAL(2, 1),
+    PRIMARY KEY(id_velo, id_user),
+    CONSTRAINT fk_donne_velo
+        FOREIGN KEY(id_velo) REFERENCES Velo(id_velo),
+    CONSTRAINT fk_donne_user
+        FOREIGN KEY(id_user) REFERENCES user(id)
+);
 
 INSERT INTO Marque VALUES
 (NULL, 'Cannondale'),
@@ -228,6 +238,3 @@ INSERT INTO etat (libelle_etat) VALUES
 ('Expédié'),
 ('Validé'),
 ('Confirmé');
-
-SELECT * FROM panier;
-SELECT * FROM panier INNER JOIN Velo ON panier.id_velo = Velo.id_velo RIGHT JOIN defini ON panier.id_velo = defini.id_velo AND panier.id_couleur = defini.id_couleur INNER JOIN Couleur ON panier.id_couleur = Couleur.id_couleur;
