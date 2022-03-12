@@ -12,7 +12,7 @@ client_article = Blueprint('client_article', __name__,
 @client_article.route('/client/article/show')      # remplace /client
 def client_article_show():                                 # remplace client_index
     mycursor = get_db().cursor()
-    sql = "SELECT *, COUNT(Avis.note) AS nb_notes, AVG(Avis.note) AS moy_notes, COUNT(Avis.commentaire) AS nb_avis FROM Velo INNER JOIN Fournisseur ON Velo.id_fournisseur = Fournisseur.id_fournisseur INNER JOIN Type_velo ON Velo.id_type_velo = Type_velo.id_type_velo LEFT JOIN depose ON Velo.id_velo = depose.id_velo LEFT JOIN Avis ON depose.id_avis = Avis.id_avis "
+    sql = "SELECT * FROM Velo INNER JOIN Fournisseur ON Velo.id_fournisseur = Fournisseur.id_fournisseur INNER JOIN Type_velo ON Velo.id_type_velo = Type_velo.id_type_velo INNER JOIN defini ON Velo.id_velo = defini.id_velo INNER JOIN Couleur ON defini.id_couleur = Couleur.id_couleur "
     list_param = []
     condition_and = ""
     if "filter_word" in session or "filter_prix_min" in session or "filter_prix_max" in session or "filter_types" in session:
@@ -37,12 +37,11 @@ def client_article_show():                                 # remplace client_ind
             list_param.append(item)
         sql = sql + ")"
 
-    sql = sql + " GROUP BY Velo.id_velo"
     tuple_sql = tuple(list_param)
 
     mycursor.execute(sql, tuple_sql)
     articles = mycursor.fetchall()
-
+    print(articles)
 
     #mycursor.execute("SELECT * FROM Velo INNER JOIN Fournisseur ON Velo.id_fournisseur = Fournisseur.id_fournisseur ORDER BY id_velo")
     #articles = mycursor.fetchall()
@@ -50,9 +49,10 @@ def client_article_show():                                 # remplace client_ind
 
     mycursor.execute("SELECT * FROM Type_velo")
     types_articles = mycursor.fetchall()
-    sql = "SELECT * FROM panier INNER JOIN Velo ON panier.id_velo = Velo.id_velo WHERE id_user = %s"
+    sql = "SELECT * FROM panier INNER JOIN Velo ON panier.id_velo = Velo.id_velo RIGHT JOIN defini ON panier.id_velo = defini.id_velo AND panier.id_couleur = defini.id_couleur INNER JOIN Couleur ON panier.id_couleur = Couleur.id_couleur WHERE id_user = %s"
     mycursor.execute(sql, session['user_id'])
     articles_panier = mycursor.fetchall()
+    print(articles_panier)
     sql = "SELECT SUM(Velo.prix_velo * panier.quantite_panier) AS prix_total FROM panier INNER JOIN Velo ON panier.id_velo = Velo.id_velo WHERE panier.id_user = %s"
     mycursor.execute(sql, session['user_id'])
     prix_total = mycursor.fetchone()['prix_total']
@@ -61,7 +61,7 @@ def client_article_show():                                 # remplace client_ind
 @client_article.route('/client/article/details/<int:id>', methods=['GET'])
 def client_article_details(id):
     mycursor = get_db().cursor()
-    sql = "SELECT * FROM Velo WHERE id_velo = %s"
+    sql = "SELECT * FROM Velo INNER JOIN defini ON Velo.id_velo = defini.id_velo WHERE Velo.id_velo = %s"
     mycursor.execute(sql, id)
     article = mycursor.fetchone()
     print(article)
